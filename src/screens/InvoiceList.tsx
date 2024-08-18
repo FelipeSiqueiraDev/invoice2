@@ -23,6 +23,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button } from "@components/Button";
 import { Camera, ModalCameraHandles } from "@components/Camera";
 import { InvoiceCard } from "@components/InvoiceCard";
+import { InvoiceDTO } from "@dtos/InvoiceDTO";
 
 export type ProgramRoutesParams = {
   invoiceList: {
@@ -160,6 +161,7 @@ export function InvoiceList() {
           rounded={"$full"}
           onPress={() => setAddDocModalVisibility(true)}
         >
+          {/* @ts-ignore */}
           <Icon as={Ionicons} name={"add"} size={"md"} color={"white"} />
         </Pressable>
 

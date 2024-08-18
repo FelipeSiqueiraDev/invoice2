@@ -3,12 +3,12 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 
+import { InvoiceDTO } from "@dtos/InvoiceDTO";
+
 import { Home } from "@screens/Home";
 import { Checkout, CheckoutFormProps } from "@screens/Checkout";
-/* import { DocumentProps, InvoiceList } from "@screens/InvoiceList";
-import { InvoicePage } from "@screens/InvoicePage"; */
-import { InvoiceDTO } from "@dtos/InvoiceDTO";
 import { InvoiceList } from "@screens/InvoiceList";
+import { InvoicePage } from "@screens/InvoicePage";
 
 export type ProgramRoutes = {
   home: undefined;
@@ -33,10 +33,10 @@ export function ProgramRoutes() {
         headerShown: false,
       }}
     >
+      <Screen name="invoicePage" component={InvoicePage} />
       <Screen name="home" component={Home} />
       <Screen name="checkout" component={Checkout} />
       <Screen name="invoiceList" component={InvoiceList} />
-      {/* <Screen name="invoicePage" component={InvoicePage} /> */}
     </Navigator>
   );
 }

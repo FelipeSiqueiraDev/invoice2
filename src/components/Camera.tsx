@@ -5,78 +5,51 @@ import {
   useImperativeHandle,
   useState,
 } from "react";
-import {
-  Icon,
-  Modal,
-  IButtonProps,
-  useDisclose,
-  Box,
-  Button as GlueButton,
-} from "@gluestack/themed";
-import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { ProgramNavigatorRoutesProps } from "@routes/program.routes";
+import { IButtonProps, Icon, Modal } from "@gluestack-ui/themed";
 import Dialog from "react-native-dialog";
+
+import { Feather } from "@expo/vector-icons";
+
+import { useDisclose } from "@services/useDisclose";
+
 import {
   CameraView,
   BarcodeScanningResult,
   useCameraPermissions,
 } from "expo-camera";
-import { Linking } from "react-native";
-import Toast from "react-native-toast-message";
-
-type Props = {
-  onBarCodeScanned: (data: string) => void;
-  trigger?: React.FC<IButtonProps>;
-};
+import { BarCodeScanningResult } from "expo-camera/build/legacy/Camera.types";
+import { Button } from "./Button";
 
 export type ModalCameraHandles = {
   openModal: () => void;
   closeModal: () => void;
 };
 
+type Props = {
+  onBarCodeScanned: (data: string) => void;
+  trigger?: React.FC<IButtonProps>;
+};
+
 const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
   { onBarCodeScanned, trigger: Trigger }: Props,
   ref
 ) => {
-  const navigation = useNavigation<ProgramNavigatorRoutesProps>();
   const { isOpen, onOpen, onClose } = useDisclose();
   const [permission, requestPermission] = useCameraPermissions();
-  const [writeDocCodeModalVisibility, setWriteDocCodeModalVisibility] =
+  const [writeDocCodeModalVisibility, SetWriteDocCodeModalVisibility] =
     useState(false);
   const [docCode, setDocCode] = useState("");
 
-  useImperativeHandle(ref, () => ({
-    openModal: onOpen,
-    closeModal: onClose,
-  }));
+  useImperativeHandle(ref, () => {
+    return {
+      openModal: onOpen,
+      closeModal: onClose,
+    };
+  });
 
-  async function handleBarCodeScanned({ data }: BarcodeScanningResult) {
+  async function handleBarcodeScanned({ data }: BarCodeScanningResult) {
     console.log(data);
     onBarCodeScanned(data);
-    // onClose();
-  }
-
-  async function handleCameraSettings() {
-    if (permission?.status === "denied") {
-      Toast.show({
-        type: "error",
-        text1: "Permissão da câmera necessária",
-        text2: "Dê permissão a câmera para poder utilizar o app",
-      });
-
-      setTimeout(() => {
-        Linking.openSettings();
-      }, 3000);
-    }
-
-    if (permission?.status !== "granted" && permission?.canAskAgain) {
-      requestPermission();
-    }
-
-    if (permission?.status === "granted") {
-      onOpen();
-    }
   }
 
   useEffect(() => {
@@ -87,54 +60,41 @@ const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="full">
-        <Box
-          h={12}
-          w={12}
-          bg={"blue.700"}
-          rounded={"3xl"}
-          right={8}
+      <Modal flex={1} isOpen={isOpen}>
+        <Icon
+          //@ts-ignore
+          name={"arrow-left"}
+          as={Feather}
+          color={"$blue700"}
           position={"absolute"}
-          zIndex={99}
-          top={16}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
-          <Icon
-            as={AntDesign}
-            name={"back"}
-            color={"white"}
-            size={6}
-            onPress={onClose}
-          />
-        </Box>
+          top={"$16"}
+          right={"$8"}
+          size={"lg"}
+          onPress={onClose}
+        />
 
         <CameraView
-          onBarcodeScanned={handleBarCodeScanned}
+          onBarcodeScanned={handleBarcodeScanned}
           barcodeScannerSettings={{ barcodeTypes: ["ean13"] }}
           style={{ flex: 1, width: "100%" }}
         />
 
-        <Box bottom={4} zIndex={99} position={"absolute"} w={"100%"} px={4}>
-          <GlueButton
-            onPress={() => {
-              setWriteDocCodeModalVisibility(true);
-              onClose();
-            }}
-          >
-            Digitar código
-          </GlueButton>
-        </Box>
+        <Button
+          title={"Digitar o código"}
+          onPress={() => {
+            SetWriteDocCodeModalVisibility(true), onClose();
+          }}
+        />
       </Modal>
 
       <Dialog.Container
         visible={writeDocCodeModalVisibility}
-        contentStyle={{ width: 300 }}
+        contentStyle={{ width: 350 }}
       >
         <Dialog.Title>Digite o código de barras do documento</Dialog.Title>
         <Dialog.Input
-          placeholder="Digite o código de barras do documento"
-          keyboardType="numeric"
+          placeholder={"Digite o código de barras do documento"}
+          keyboardType={"numeric"}
           value={docCode}
           onChangeText={(text) => {
             if (text.length <= 44) {
@@ -142,18 +102,20 @@ const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
             }
           }}
         />
+
         <Dialog.Button
           label={"Enviar"}
           onPress={() => {
             onBarCodeScanned(docCode);
-            setWriteDocCodeModalVisibility(false);
+            SetWriteDocCodeModalVisibility(false);
             setDocCode("");
           }}
         />
+
         <Dialog.Button
           label={"Cancelar"}
           onPress={() => {
-            setWriteDocCodeModalVisibility(false);
+            SetWriteDocCodeModalVisibility(false);
             onOpen();
             setDocCode("");
           }}

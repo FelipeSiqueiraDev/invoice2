@@ -9,9 +9,12 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 
-import { InvoiceDTO } from "@dtos/InvoiceDTO";
+interface InvoiceCardProp {
+  Chave: string;
+  type?: string;
+}
 
-export function InvoiceCard({ Chave, type }: InvoiceDTO) {
+export function InvoiceCard({ Chave, type }: InvoiceCardProp) {
   return (
     <Pressable>
       <HStack w={"$full"} alignItems={"center"} px={"$2"}>

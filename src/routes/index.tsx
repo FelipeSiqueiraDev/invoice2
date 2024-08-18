@@ -19,7 +19,7 @@ export function Routes() {
   return (
     <Box flex={1} bg={"$coolGray100"}>
       <NavigationContainer theme={theme}>
-        {logged ? (
+        {!logged ? (
           <DocumentContextProvider>
             <ProgramRoutes />
           </DocumentContextProvider>

@@ -71,6 +71,7 @@ const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
           right={"$8"}
           size={"lg"}
           onPress={onClose}
+          zIndex={1000}
         />
 
         <CameraView

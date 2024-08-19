@@ -10,7 +10,6 @@ import {
   Text,
   View,
   VStack,
-  
   Button as NBButton,
 } from "@gluestack-ui/themed";
 
@@ -91,7 +90,19 @@ export function InvoicePage() {
   useEffect(() => {}, [documents]);
 
   return (
-    <Center flex={1} px={"$8"}>
+    <VStack flex={1} px={"$8"} py={"$24"} alignItems={"center"}>
+      <Icon
+        //@ts-ignore
+        name={"trash"}
+        as={Feather}
+        color={"$blue700"}
+        position={"absolute"}
+        top={"$16"}
+        left={"$8"}
+        size={"lg"}
+        onPress={() => setAddDeleteDoclVisibility(true)}
+      />
+
       <Icon
         //@ts-ignore
         name={"arrow-left"}
@@ -104,88 +115,94 @@ export function InvoicePage() {
         onPress={() => navigation.goBack()}
       />
 
-      <Heading>{data.type}</Heading>
-
-      <Text fontSize={"$lg"} w={232} mb={"$4"}>
-        {data.Chave}
-      </Text>
+      <Heading fontSize={"$lg"} w={232} mb={"$4"} lineHeight={"$sm"}>
+        {data?.Chave}
+      </Heading>
 
       <HStack
         justifyContent={"space-around"}
         my={"$6"}
         borderBottomWidth={"$2"}
         borderBottomColor={"$blue700"}
+        w={"$full"}
       >
         <HStack>
           <Text fontFamily={"$heading"} mr={"$2"} color={"$blue700"}>
             VALOR:
           </Text>
-          <Text>R$ {Number(data.TotalNfVlr).toFixed(2)}</Text>
+          <Text>R$ {Number(data?.TotalNfVlr).toFixed(2)}</Text>
         </HStack>
 
         <HStack>
           <Text fontFamily={"$heading"} mr={"$2"} color={"$blue700"}>
             NOTA:
           </Text>
-          <Text>{data.Numero}</Text>
+          <Text>{data?.Numero}</Text>
         </HStack>
+      </HStack>
 
-        <HStack justifyContent={"space-between"} mb={"$4"}>
-          <Text
-            fontFamily={"$heading"}
-            mr={"$2"}
-            color={"$blue700"}
-            fontSize={"$lg"}
-          >
-            FOTOS
-          </Text>
+      <HStack
+        justifyContent={"space-around"}
+        mb={"$4"}
+        w={"$full"}
+        alignItems={"center"}
+      >
+        <Text
+          fontFamily={"$heading"}
+          mr={"$2"}
+          color={"$blue700"}
+          fontSize={"$lg"}
+          flex={1}
+        >
+          FOTOS
+        </Text>
 
-          <Icon
-            as={AntDesign}
-            //@ts-ignore
-            name={"camera"}
-            color={"$blue700"}
-            size={"lg"}
-            onPress={handleCameraSettings}
-          />
-        </HStack>
-
-        <VStack>
-          {groupedImages.map((imageGroup, rowIndex) => (
-            <HStack key={rowIndex} justifyContent={"space-between"}>
-              {imageGroup.map((imageUri, colIndex) => (
-                <Pressable
-                  key={`${rowIndex}${colIndex}`}
-                  onPress={() => {
-                    setSelectedImage(imageUri);
-                  }}
-                >
-                  <Image
-                    key={colIndex}
-                    style={{
-                      width: 160,
-                      height: 160,
-                      margin: 8,
-                      borderWidth: 2,
-                      borderColor: "black",
-                    }}
-                    source={{ uri: imageUri }}
-                    alt="Foto das Notas Fiscais"
-                  />
-                </Pressable>
-              ))}
-            </HStack>
-          ))}
-        </VStack>
-
-        <Button
-          title={"Concluir"}
-          position={"absolute"}
-          bottom={"$4"}
-          onPress={() => navigation.goBack()}
+        <Icon
+          as={AntDesign}
+          //@ts-ignore
+          name={"camera"}
+          color={"$blue700"}
+          size={"lg"}
+          onPress={handleCameraSettings}
         />
+      </HStack>
 
-<Dialog.Container visible={addDeleteDoclVisibility}>
+      <VStack>
+        {groupedImages.map((imageGroup, rowIndex) => (
+          <HStack key={rowIndex} justifyContent={"space-between"}>
+            {imageGroup.map((imageUri, colIndex) => (
+              <Pressable
+                key={`${rowIndex}${colIndex}`}
+                onPress={() => {
+                  setSelectedImage(imageUri);
+                }}
+              >
+                <Image
+                  key={colIndex}
+                  style={{
+                    width: 160,
+                    height: 160,
+                    margin: 8,
+                    borderWidth: 2,
+                    borderColor: "black",
+                  }}
+                  source={{ uri: imageUri }}
+                  alt="Foto das Notas Fiscais"
+                />
+              </Pressable>
+            ))}
+          </HStack>
+        ))}
+      </VStack>
+
+      <Button
+        title={"Concluir"}
+        position={"absolute"}
+        bottom={"$4"}
+        onPress={() => navigation.goBack()}
+      />
+
+      <Dialog.Container visible={addDeleteDoclVisibility}>
         <Dialog.Title>Excluir</Dialog.Title>
         <Dialog.Description>
           Tem certeza que deseja excluir o documento?
@@ -230,6 +247,7 @@ export function InvoicePage() {
             source={{ uri: selectedImage }}
             alt="Foto das Notas Fiscais"
           />
+
           <HStack>
             <NBButton
               style={{ marginRight: 12 }}
@@ -241,18 +259,23 @@ export function InvoicePage() {
               mt={4}
               backgroundColor="red.500"
             >
-              Excluir
+              <Text bg={"$red500"} p={"$2"} rounded={"$lg"} color={"$white"}>
+                Excluir
+              </Text>
             </NBButton>
+
             <NBButton
               onPress={() => setSelectedImage("")}
               mt={2}
               backgroundColor="gray.500"
             >
-              Fechar
+              <Text bg={"$blue500"} p={"$2"} rounded={"$lg"} color={"$white"}>
+                Fechar
+              </Text>
             </NBButton>
           </HStack>
         </View>
       </Modal>
-    </Center>
+    </VStack>
   );
 }

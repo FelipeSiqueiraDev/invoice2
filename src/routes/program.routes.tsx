@@ -33,10 +33,10 @@ export function ProgramRoutes() {
         headerShown: false,
       }}
     >
-      <Screen name="invoicePage" component={InvoicePage} />
       <Screen name="home" component={Home} />
       <Screen name="checkout" component={Checkout} />
       <Screen name="invoiceList" component={InvoiceList} />
+      <Screen name="invoicePage" component={InvoicePage} />
     </Navigator>
   );
 }

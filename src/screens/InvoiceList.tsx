@@ -7,6 +7,7 @@ import {
   Icon,
   Pressable,
   Text,
+  VStack,
 } from "@gluestack-ui/themed";
 import Dialog from "react-native-dialog";
 import Toast from "react-native-toast-message";
@@ -23,6 +24,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button } from "@components/Button";
 import { Camera, ModalCameraHandles } from "@components/Camera";
 import { InvoiceCard } from "@components/InvoiceCard";
+
 import { InvoiceDTO } from "@dtos/InvoiceDTO";
 
 export type ProgramRoutesParams = {
@@ -71,18 +73,23 @@ export function InvoiceList() {
       const {
         data: { Entity },
       } = await api.post(
-        "Services/Default/NOtaFiscalEntrada/GetNotaFiscalEntradabyChave",
+        "/Services/Default/NotaFiscalEntrada/GetNotaFiscalEntradaByChave",
         settings
       );
 
       addDocument({ ...Entity, type: docType });
-    } catch (error) {
-      console.log(error);
+      //@ts-ignore
+      navigation.navigate("invoicePage", { data: Entity, type: docType });
+    } catch (err) {
+      //@ts-ignore
+      console.log(err.response);
+
       Toast.show({
         type: "error",
-        text1: "Algo errado aconteceu!",
+        text1: "Algo errado aconteceu",
         text2: "Ocorreu um erro inesperado, tente novamente",
       });
+
       cameraRef.current?.closeModal();
     }
   }
@@ -132,14 +139,20 @@ export function InvoiceList() {
       <FlatList
         data={documents}
         //@ts-ignore
-        keyExtractor={(item) => item.Chave}
+        keyExtractor={(item: InvoiceDTO) => item.Chave}
         showsVerticalScrollIndicator={false}
-        style={{ height: 120 }}
-        renderItem={({ item }) => (
-          <InvoiceCard Chave={item.Chave} type={item.type} />
+        style={{ height: 120, width: "90%", paddingTop: 12 }}
+        //@ts-ignore
+        renderItem={({ item }: { item: InvoiceDTO }) => (
+          <InvoiceCard invoice={item} />
         )}
         ListEmptyComponent={() => (
-          <Heading fontSize={"$3xl"} color={"$blue300"} mt={"$32"}>
+          <Heading
+            fontSize={"$3xl"}
+            color={"$blue300"}
+            mt={"$32"}
+            textAlign={"center"}
+          >
             LISTA VAZIA
           </Heading>
         )}
@@ -150,6 +163,7 @@ export function InvoiceList() {
           title={"Enviar"}
           disabled={documents?.length === 0}
           $disabled-bg={"gray200"}
+          onPress={handleSendDocuments}
         />
         <Pressable
           w={"$14"}

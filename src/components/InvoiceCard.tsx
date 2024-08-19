@@ -9,35 +9,62 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 
-interface InvoiceCardProp {
-  Chave: string;
+import { InvoiceDTO } from "@dtos/InvoiceDTO";
+interface InvoiceCardProps {
+  invoice: InvoiceDTO;
   type?: string;
 }
 
-export function InvoiceCard({ Chave, type }: InvoiceCardProp) {
+import { useNavigation } from "@react-navigation/native";
+import { ProgramNavigatorRoutesProps } from "@routes/program.routes";
+
+export function InvoiceCard({ invoice, type }: InvoiceCardProps) {
+  const navigation = useNavigation<ProgramNavigatorRoutesProps>();
+
+  const firstLine = invoice.Chave.substring(0, 22);
+  const secondLine = invoice.Chave.substring(22, 44);
   return (
-    <Pressable>
-      <HStack w={"$full"} alignItems={"center"} px={"$2"}>
+    <Pressable
+      w={"$full"}
+      h={"$20"}
+      bg={"$blue200"}
+      mb={"$2"}
+      justifyContent={"center"}
+      rounded={"$lg"}
+      onPress={() => navigation.navigate("invoicePage", { data: invoice })}
+    >
+      <HStack w={"$full"} px={"$5"}>
         <VStack w={"$10"} alignItems={"center"} justifyContent={"center"}>
           <Icon
+            color={"$blue500"}
             as={Ionicons}
             //@ts-ignore
             name={type === "NF" ? "document-text" : "document-text-outline"}
           />
 
-          <Text>{type ?? "Doc"}</Text>
+          <Text color={"$blue500"} fontSize={"$lg"}>
+            {invoice.type ?? "Doc"}
+          </Text>
         </VStack>
 
-        <Heading
-          textAlign={"left"}
-          fontFamily={"$heading"}
-          fontSize={"$sm"}
-          color={"$blue700"}
-          w={"$16"}
-          ml={"$12"}
-        >
-          {Chave}
-        </Heading>
+        <VStack ml={"$12"}>
+          <Text
+            textAlign={"left"}
+            fontFamily={"$heading"}
+            fontSize={"$md"}
+            color={"$blue700"}
+          >
+            {firstLine}
+          </Text>
+          <Text
+            textAlign={"left"}
+            fontFamily={"$heading"}
+            fontSize={"$md"}
+            color={"$blue700"}
+          >
+            {secondLine}
+          </Text>
+        </VStack>
       </HStack>
     </Pressable>
   );

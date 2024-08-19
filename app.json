@@ -22,7 +22,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#048BF3"
       },
-      "permissions": ["CAMERA"]
+      "permissions": [
+        "CAMERA",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.tisistemasfarid.InvoiceApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,6 +45,17 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c8b96424-0a4c-4b4f-9b1b-676d6ba8d30a"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c8b96424-0a4c-4b4f-9b1b-676d6ba8d30a"
+    }
   }
 }

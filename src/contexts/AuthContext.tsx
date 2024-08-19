@@ -48,15 +48,22 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         text2: `Seja bem vindo ${Entity.DisplayName}`,
       });
     } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "Erro ao fazer login",
-      });
-
       if (axios.isAxiosError(error)) {
         console.log(error.response?.data);
+
+        Toast.show({
+          type: "error",
+          text1: "Erro ao fazer login",
+          text2: error.response?.data,
+        });
       } else {
         console.log(error);
+
+        Toast.show({
+          type: "error",
+          text1: "Erro ao fazer login",
+          text2: "Ocorreu um erro desconhecido, tente novamente",
+        });
       }
     }
   }

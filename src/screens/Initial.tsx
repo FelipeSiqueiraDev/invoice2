@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { Center, Heading, VStack } from "@gluestack-ui/themed";
+import { Center, Heading, Text, VStack } from "@gluestack-ui/themed";
 
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
@@ -34,6 +34,7 @@ export function Initial() {
         <Heading fontStyle={"italic"} mb={"$12"}>
           - INVOICE CHECK -
         </Heading>
+        <Text>2.0.0</Text>
 
         <Button
           title={"Começar"}

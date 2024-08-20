@@ -30,7 +30,7 @@ export function Home() {
         onPress={() => setLogoutModalVisibility(true)}
       />
       <Text color={"$blue900"} position={"absolute"} top={"$16"} left={"$8"}>
-        2.0.1
+        2.0.0
       </Text>
 
       <Button

@@ -34,7 +34,6 @@ export function Initial() {
         <Heading fontStyle={"italic"} mb={"$12"}>
           - INVOICE CHECK -
         </Heading>
-        <Text>2.0.0</Text>
 
         <Button
           title={"Começar"}

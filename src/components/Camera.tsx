@@ -47,8 +47,12 @@ const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
     };
   });
 
-  async function handleBarcodeScanned({ data }: BarCodeScanningResult) {
-    console.log(data);
+  async function handleBarcodeScanned({ data, type }: BarCodeScanningResult) {
+    
+    console.log({type});
+    console.log({data});
+
+    onClose();    
     onBarCodeScanned(data);
   }
 
@@ -76,7 +80,7 @@ const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
 
         <CameraView
           onBarcodeScanned={handleBarcodeScanned}
-          barcodeScannerSettings={{ barcodeTypes: ["ean13"] }}
+          barcodeScannerSettings={{ barcodeTypes: ["code128"] }}
           style={{ flex: 1, width: "100%" }}
         />
 

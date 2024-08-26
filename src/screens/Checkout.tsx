@@ -99,7 +99,7 @@ export function Checkout() {
           render={({ field: { onChange, value } }) => (
             <Input
               placeholder={"CPF"}
-              keyboardType={"default"}
+              keyboardType={"numeric"}
               autoCapitalize={"none"}
               onChangeText={onChange}
               value={value}

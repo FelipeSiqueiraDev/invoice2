@@ -48,11 +48,7 @@ const CameraComponent: ForwardRefRenderFunction<ModalCameraHandles, Props> = (
   });
 
   async function handleBarcodeScanned({ data, type }: BarCodeScanningResult) {
-    
-    console.log({type});
-    console.log({data});
-
-    onClose();    
+    onClose();
     onBarCodeScanned(data);
   }
 

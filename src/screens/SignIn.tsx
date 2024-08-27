@@ -97,6 +97,8 @@ export function SingIn() {
               secureTextEntry={passwordVisibility}
               onChangeText={onChange}
               value={value}
+              autoCorrect={false}
+              autoCapitalize={"none"}
               errorMessage={errors.password?.message}
             />
           )}

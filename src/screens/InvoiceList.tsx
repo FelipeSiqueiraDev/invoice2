@@ -12,7 +12,7 @@ import {
 import Dialog from "react-native-dialog";
 import Toast from "react-native-toast-message";
 
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather } from "@expo/vector-icons";
 
 import { useDocument } from "@hooks/useDocuments";
 import { uploadAllImages } from "@services/temporaryUpload";
@@ -23,8 +23,8 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
 import { Button } from "@components/Button";
 import { Camera, ModalCameraHandles } from "@components/Camera";
-import { InvoiceCard } from "@components/InvoiceCard";
 
+import { InvoiceCard } from "@components/InvoiceCard";
 import { InvoiceDTO } from "@dtos/InvoiceDTO";
 
 export type ProgramRoutesParams = {
@@ -46,11 +46,16 @@ export function InvoiceList() {
   const { data } = route.params;
 
   const [addDocModalVisibility, setAddDocModalVisibility] = useState(false);
+  const [cancelModalVisibility, setCancelModalVisibility] = useState(false);
   const [docType, setDocType] = useState<string | null>(null);
 
-  const { documents, setDocument, addDocument } = useDocument();
+  const { documents, setDocument, addDocument, removeDocument } = useDocument();
 
   const cameraRef = useRef<ModalCameraHandles>(null);
+
+  function removeAllDocuments() {
+    documents.map((doc) => removeDocument(doc));
+  }
 
   async function handleAddDocument(data: string) {
     const isDuplicate = documents.some((doc) => doc.Chave === data);
@@ -134,6 +139,20 @@ export function InvoiceList() {
     <Center flex={1} mt={"$20"}>
       <Heading>Documentos</Heading>
 
+      <Icon
+        //@ts-ignore
+        name={"arrow-left"}
+        as={Feather}
+        color={"$blue700"}
+        position={"absolute"}
+        top={"$0"}
+        right={"$8"}
+        size={"lg"}
+        onPress={() => {
+          setCancelModalVisibility(true);
+        }}
+      />
+
       <Camera onBarCodeScanned={handleAddDocument} ref={cameraRef} />
 
       <FlatList
@@ -165,6 +184,19 @@ export function InvoiceList() {
           $disabled-bg={"gray200"}
           onPress={handleSendDocuments}
         />
+
+        <Icon
+          //@ts-ignore
+          name={"arrow-left"}
+          as={Feather}
+          color={"$blue700"}
+          position={"absolute"}
+          top={"$16"}
+          right={"$8"}
+          size={"lg"}
+          onPress={() => navigation.goBack()}
+        />
+
         <Pressable
           w={"$14"}
           h={"$14"}
@@ -194,6 +226,26 @@ export function InvoiceList() {
           <Dialog.Button
             label={"Cancelar"}
             onPress={() => setAddDocModalVisibility(false)}
+          />
+        </Dialog.Container>
+
+        <Dialog.Container visible={cancelModalVisibility}>
+          <Dialog.Title>Cancelar leitura?</Dialog.Title>
+          <Dialog.Description>
+            Se você cancelar a leitura os documentos e fotos já registrados
+            serão perdidos
+          </Dialog.Description>
+
+          <Dialog.Button
+            label={"Continuar"}
+            onPress={() => {
+              navigation.navigate("home"), removeAllDocuments();
+            }}
+          />
+
+          <Dialog.Button
+            label={"Cancelar"}
+            onPress={() => setCancelModalVisibility(false)}
           />
         </Dialog.Container>
       </HStack>

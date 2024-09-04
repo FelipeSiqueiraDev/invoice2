@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Linking, Modal } from "react-native";
 import {
-  Center,
   Heading,
   HStack,
   Icon,
@@ -132,7 +131,7 @@ export function InvoicePage() {
           <Text fontFamily={"$heading"} mr={"$2"} color={"$blue700"}>
             VALOR:
           </Text>
-          <Text>R$ {Number(data?.TotalNfVlr).toFixed(2)}</Text>
+          <Text>R$ {Number(data?.TotalFaturasLiquidoVlr).toFixed(2)}</Text>
         </HStack>
 
         <HStack>

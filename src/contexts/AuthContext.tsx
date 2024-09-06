@@ -49,16 +49,26 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
-
-        Toast.show({
-          type: "error",
-          text1: "Erro ao fazer login",
-          text2: error.response?.data,
-        });
+        if (error.message === "Request failed with status code 400") {
+          Toast.show({
+            type: "error",
+            text1: "Erro ao fazer login",
+            text2: "Usuário ou senha inválidos",
+          });
+        } else if (error.message === "Network Error") {
+          Toast.show({
+            type: "error",
+            text1: "Erro ao fazer login",
+            text2: "Verifique sua conexão com a internet",
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: "Erro ao fazer login",
+            text2: "Ocorreu um erro desconhecido, tente novamente",
+          });
+        }
       } else {
-        console.log(error);
-
         Toast.show({
           type: "error",
           text1: "Erro ao fazer login",

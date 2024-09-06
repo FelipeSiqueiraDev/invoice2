@@ -48,8 +48,6 @@ export function InvoicePage() {
   const route = useRoute<InvoicePageRouteProp>();
   const { data } = route.params;
 
-  console.log(data)
-
   const [permission, requestPermission] = useCameraPermissions();
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [addDeleteDoclVisibility, setAddDeleteDoclVisibility] = useState(false);

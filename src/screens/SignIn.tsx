@@ -47,11 +47,7 @@ export function SingIn() {
     try {
       await signIn({ username, password });
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
-      } else {
-        console.log(error);
-      }
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
